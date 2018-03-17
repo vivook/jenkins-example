@@ -50,7 +50,7 @@ pipeline {
             steps {
                 // todo - in parallel
                 script {
-                    docker.withRegistry("https://registry.hub.docker.com", "vivook-dockerhub") {
+                    docker.withRegistry("https://index.docker.io/v1/", "vivook-dockerhub") {
                         sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml push"
                     }
                 }
