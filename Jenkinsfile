@@ -48,7 +48,7 @@ pipeline {
 
         stage('Push') {
             steps {
-                // todo - in parallel
+                // todo - push specific tags (e.g. $env.BUILD_ID) and in parallel
                 script {
                     docker.withRegistry("https://index.docker.io/v1/", "vivook-dockerhub") {
                         sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml push"
@@ -65,10 +65,8 @@ pipeline {
 
         stage('Functional tests') {
             steps {
-                echo "To do: Run tests in parallel here..."
+                echo "To do: Run functional tests in parallel here to make sure everything came up correctly..."
             }
         }
-
-
     }
 }
