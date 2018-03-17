@@ -1,7 +1,7 @@
 version: '3'
 services:
   app1:
-    image: app1:latest
+    image: vivook/app1
     build:
       context: ..
       dockerfile: docker/Dockerfile.app
@@ -10,6 +10,7 @@ services:
     ports:
     - "5001:5000"
   app2:
+    image: vivook/app2
     build:
       context: ..
       dockerfile: docker/Dockerfile.app
