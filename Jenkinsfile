@@ -49,8 +49,10 @@ pipeline {
         stage('Push') {
             steps {
                 // todo - in parallel
-                docker.withRegistry("https://hub.docker.com/", "vivook-dockerhub") {
-                    sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml push"
+                script {
+                    docker.withRegistry("https://hub.docker.com/", "vivook-dockerhub") {
+                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml push"
+                    }
                 }
             }
         }
