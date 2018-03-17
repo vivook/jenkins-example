@@ -23,14 +23,14 @@ pipeline {
                 stage('Build app1') {
                     steps {
                         echo "Building app1"
-                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} up --build --no-start app1"
+                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml up --build --no-start app1"
                         // this will tag the image as `${env.BUILD_ID}_app1:latest`
                     }
                 }
                 stage('Build app2') {
                     steps {
                         echo "Building app2"
-                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} up --build --no-start app2"
+                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml up --build --no-start app2"
                     }
                 }
             }
@@ -45,13 +45,13 @@ pipeline {
         stage('Push') {
             steps {
                 // todo - in parallel
-                sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} push"
+                sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml push"
             }
         }
 
         stage('Deploy') {
             steps {
-                sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} up -d"
+                sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml up -d"
             }
         }
 
