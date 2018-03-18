@@ -1,4 +1,4 @@
-//@Library("dockerCompose") _
+@Library("docker") _
 
 pipeline {
     // checkout the code
