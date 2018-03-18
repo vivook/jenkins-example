@@ -1,3 +1,5 @@
+@Library("dockerCompose") _
+
 pipeline {
     // checkout the code
 
@@ -24,7 +26,8 @@ pipeline {
                     steps {
                         echo "Building app1"
                         // we could extract the output of docker-compose --build to avoid having to specify `vivook/app1:latest` here
-                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml up --build --no-start app1"
+                        dockerCompose "up --build --no-start app1"
+//                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml up --build --no-start app1"
                         // this will tag the image as `${env.BUILD_ID}_app1:latest`, so retag it with the build ID
                         sh "/usr/bin/docker tag vivook/app1:latest vivook/app1:${env.BUILD_ID}"
                     }
@@ -32,7 +35,8 @@ pipeline {
                 stage('Build app2') {
                     steps {
                         echo "Building app2"
-                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml up --build --no-start app2"
+//                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml up --build --no-start app2"
+                        dockerCompose "up --build --no-start app2"
                         // this will tag the image as `${env.BUILD_ID}_app2:latest`, so retag it with the build ID
                         sh "/usr/bin/docker tag vivook/app2:latest vivook/app2:${env.BUILD_ID}"
                     }
