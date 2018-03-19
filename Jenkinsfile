@@ -52,16 +52,16 @@ pipeline {
         }
 
         stage('Push') {
-            when {
-                allOf {
+//            when {
+//                allOf {
                     timeout(time: 10, unit: 'MINUTES') {
                         input {
                             message "Push to docker hub?"
                             ok "Yes"
                         }
                     }
-                }
-            }
+//                }
+//            }
             steps {
                 // todo - push specific tags (e.g. $env.BUILD_ID) and in parallel
                 script {
