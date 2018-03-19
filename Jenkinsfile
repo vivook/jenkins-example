@@ -59,29 +59,38 @@ pipeline {
 //                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml push"
 //                    }
 //                }
-                echo "To do: Push to docker hub (when more bandwidth is available)"
+                echo "Uncomment the above (when more bandwidth is available)"
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to staging') {
+            when {
+                not {
+                    branch 'master'
+                }
+            }
+            steps {
+                // to do: Pass an extra file to docker-compose with staging settings in
+                sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml up -d"
+            }
+        }
+
+        stage('Deploy to prod') {
+            when {
+                branch 'master'
+            }
             steps {
                 timeout(time: 10, unit: 'MINUTES') {
-                    input(message: "Push to docker hub?", ok: "Yes")
+                    input(message: "Deploy to prod?", ok: "Yes")
                 }
 
                 sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml up -d"
             }
         }
 
-        stage('Performance tests') {
-            when {
-                not {
-                    branch 'master'
-                }
-            }
-
+        stage('Functional tests') {
             steps {
-                echo "To do: Run performance tests in parallel here, but only if we're not in prod"
+                echo "To do: Run tests in parallel to make sure services came up correctly"
             }
         }
     }
