@@ -54,13 +54,8 @@ pipeline {
         stage('Push') {
             steps {
                 when {
-                    timeout {
-                        input {
-                            message "Push to docker hub?"
-                            ok "Yes."
-                        }
-                        time 10
-                        unit 'MINUTES'
+                    timeout(time: 10, unit: 'MINUTES') {
+                        input message "Push to docker hub?"
                     }
                 }
                 // todo - push specific tags (e.g. $env.BUILD_ID) and in parallel
@@ -90,12 +85,12 @@ pipeline {
         }
         failure {
             mail(subject: "Pipeline failed",
-                    body: "Build ${env.BUILD_ID} of job ${env.JOB_NAME} failed. For details see ${env.BUILD_URL}.",
+                    body: "Build ${env.BUILD_ID} of job ${env.JOB_NAME} failed. For details see ${currentBuild.absoluteUrl}.",
                     to: env.BUILD_URL)
         }
         unstable {
             mail(subject: "Pipeline returned an 'unstable' status",
-                    body: "Build ${env.BUILD_ID} of job ${env.JOB_NAME} failed. For details see ${env.BUILD_URL}.",
+                    body: "Build ${env.BUILD_ID} of job ${env.JOB_NAME} failed. For details see ${currentBuild.absoluteUrl}.",
                     to: env.BUILD_URL)
         }
     }
