@@ -59,10 +59,7 @@ pipeline {
 //            }
             steps {
                 timeout(time: 10, unit: 'MINUTES') {
-                    input {
-                        message "Push to docker hub?"
-                        ok "Yes"
-                    }
+                    input(message: "Push to docker hub?", ok: "Yes")
                 }
 
                 // todo - push specific tags (e.g. $env.BUILD_ID) and in parallel
