@@ -52,12 +52,15 @@ pipeline {
         }
 
         stage('Push') {
-            steps {
-                when {
-                    timeout(time: 10, unit: 'MINUTES') {
-                        input message "Push to docker hub?"
+            when {
+                timeout(time: 10, unit: 'MINUTES') {
+                    input {
+                        message "Push to docker hub?"
+                        ok "Yes"
                     }
                 }
+            }
+            steps {
                 // todo - push specific tags (e.g. $env.BUILD_ID) and in parallel
                 script {
                     docker.withRegistry("https://index.docker.io/v1/", "vivook-dockerhub") {
