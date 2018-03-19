@@ -84,6 +84,7 @@ pipeline {
                     input(message: "Deploy to prod?", ok: "Yes")
                 }
 
+                sh "/usr/bin/docker network prune -f"
                 sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml up -d"
             }
         }
