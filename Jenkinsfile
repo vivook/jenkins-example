@@ -52,34 +52,36 @@ pipeline {
         }
 
         stage('Push') {
-//            when {
-//                allOf {
-
-//                }
-//            }
             steps {
-                timeout(time: 10, unit: 'MINUTES') {
-                    input(message: "Push to docker hub?", ok: "Yes")
-                }
-
                 // todo - push specific tags (e.g. $env.BUILD_ID) and in parallel
-                script {
-                    docker.withRegistry("https://index.docker.io/v1/", "vivook-dockerhub") {
-                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml push"
-                    }
-                }
+//                script {
+//                    docker.withRegistry("https://index.docker.io/v1/", "vivook-dockerhub") {
+//                        sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml push"
+//                    }
+//                }
+                echo "To do: Push to docker hub (when more bandwidth is available)"
             }
         }
 
         stage('Deploy') {
             steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    input(message: "Push to docker hub?", ok: "Yes")
+                }
+
                 sh "/usr/local/bin/docker-compose -p ${env.BUILD_ID} -f docker/docker-compose.yml up -d"
             }
         }
 
-        stage('Functional tests') {
+        stage('Performance tests') {
+            when {
+                not {
+                    branch 'master'
+                }
+            }
+
             steps {
-                echo "To do: Run functional tests in parallel here to make sure everything came up correctly..."
+                echo "To do: Run performance tests in parallel here, but only if we're not in prod"
             }
         }
     }
