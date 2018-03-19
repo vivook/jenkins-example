@@ -53,10 +53,12 @@ pipeline {
 
         stage('Push') {
             when {
-                timeout(time: 10, unit: 'MINUTES') {
-                    input {
-                        message "Push to docker hub?"
-                        ok "Yes"
+                allOf {
+                    timeout(time: 10, unit: 'MINUTES') {
+                        input {
+                            message "Push to docker hub?"
+                            ok "Yes"
+                        }
                     }
                 }
             }
